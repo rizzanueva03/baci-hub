@@ -7,7 +7,7 @@
  * Or paste the contents into a Custom HTML element above the form.
  */
 (function(){
-  var HOME = 'https://logs.bacicoffeehouse.com'; /* Update to your hub URL */
+  var HOME = 'https://app.bacicoffeehouse.com'; /* Update to your hub URL */
 
   var style = document.createElement('style');
   style.textContent = [
