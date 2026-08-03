@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Baci Logs">
+<meta name="theme-color" content="#1A0F0A">
+<title>Baci Coffee House — Daily Logs</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --espresso: #1A0F0A;
+    --espresso-mid: #2C1A12;
+    --espresso-light: #3D2518;
+    --cream: #FAF5EE;
+    --cream-soft: #F2EBE0;
+    --green: #0F5E52;
+    --green-soft: #E4EFEB;
+    --amber: #C8882A;
+    --amber-soft: #F6ECD3;
+    --ink: #1A0F0A;
+    --muted: #7A6A5E;
+    --faint: #A89880;
+    --line: rgba(255,255,255,.08);
+    --card: rgba(255,255,255,.07);
+    --card-hover: rgba(255,255,255,.12);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--espresso);
+    color: var(--cream);
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  .site-header {
+    padding: 28px 28px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,.4);
+  }
+  .header-text {}
+  .header-eyebrow {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 3px;
+  }
+  .header-title {
+    font-family: Fraunces, serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.1;
+    color: var(--cream);
+  }
+
+  /* ── DATE BAR ───────────────────────────────── */
+  .date-bar {
+    padding: 14px 28px 0;
+    font-size: 12px;
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: .03em;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN GRID ──────────────────────────────── */
+  .grid-section {
+    padding: 20px 20px 28px;
+    flex: 1;
+  }
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 680px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 400px) {
+    .grid { grid-template-columns: 1fr; }
+    .site-header { padding: 20px 18px 0; }
+    .date-bar { padding: 12px 18px 0; }
+    .grid-section { padding: 16px 14px 24px; }
+  }
+
+  /* ── CARD ───────────────────────────────────── */
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 20px 18px 18px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background .18s, transform .15s, box-shadow .18s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 128px;
+    text-decoration: none;
+  }
+  .form-card:active {
+    transform: scale(.97);
+    background: var(--card-hover);
+  }
+  @media (hover: hover) {
+    .form-card:hover {
+      background: var(--card-hover);
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    }
+  }
+
+  /* Ambient icon watermark */
+  .card-ambient {
+    position: absolute;
+    right: -6px;
+    bottom: -8px;
+    font-size: 56px;
+    opacity: .08;
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* Accent dot */
+  .card-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card-body { flex: 1; min-width: 0; }
+  .card-label {
+    font-family: Fraunces, serif;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.2;
+    color: var(--cream);
+    margin-bottom: 3px;
+  }
+  .card-desc {
+    font-size: 11.5px;
+    color: var(--faint);
+    line-height: 1.4;
+  }
+
+  /* Card color themes */
+  .theme-green  .card-icon { background: rgba(15,94,82,.35); }
+  .theme-amber  .card-icon { background: rgba(200,136,42,.25); }
+  .theme-blue   .card-icon { background: rgba(37,99,235,.2); }
+  .theme-rose   .card-icon { background: rgba(190,50,60,.2); }
+  .theme-purple .card-icon { background: rgba(109,40,217,.2); }
+  .theme-slate  .card-icon { background: rgba(100,116,139,.2); }
+  .theme-teal   .card-icon { background: rgba(20,184,166,.2); }
+  .theme-orange .card-icon { background: rgba(234,88,12,.2); }
+  .theme-indigo .card-icon { background: rgba(79,70,229,.2); }
+
+  .card-arrow {
+    font-size: 13px;
+    color: var(--faint);
+    align-self: flex-end;
+    margin-top: auto;
+    transition: color .15s;
+  }
+  .form-card:hover .card-arrow,
+  .form-card:active .card-arrow { color: var(--cream); }
+
+  /* ── SECTION DIVIDER ─────────────────────────── */
+  .section-gap { margin-top: 20px; }
+
+  /* ── CONFIRMATION MODAL ──────────────────────── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,5,2,.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 900;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #2C1A12;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 22px;
+    padding: 28px 24px 22px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 24px 64px rgba(0,0,0,.5);
+    animation: modalIn .2s ease;
+  }
+  @keyframes modalIn {
+    from { opacity:0; transform:scale(.94) translateY(8px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+  }
+  .modal-icon {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .modal-title {
+    font-family: Fraunces, serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .modal-desc {
+    font-size: 13.5px;
+    color: var(--faint);
+    text-align: center;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+  }
+  .btn-cancel {
+    flex: 1;
+    padding: 13px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: transparent;
+    color: var(--faint);
+    border-radius: 12px;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-cancel:hover { background: rgba(255,255,255,.06); color: var(--cream); }
+  .btn-go {
+    flex: 2;
+    padding: 13px;
+    border: 0;
+    background: var(--green);
+    color: #fff;
+    border-radius: 12px;
+    font-family: Fraunces, serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-go:active { opacity: .85; }
+
+  /* ── INSTALL BANNER ──────────────────────────── */
+  .install-banner {
+    display: none;
+    margin: 0 20px 12px;
+    background: var(--espresso-light);
+    border: 1px solid rgba(200,136,42,.3);
+    border-radius: 14px;
+    padding: 12px 16px;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .install-banner.visible { display: flex; }
+  .install-txt { flex: 1; font-size: 13px; color: var(--cream-soft); line-height: 1.4; }
+  .install-txt b { color: var(--amber); }
+  .install-btn {
+    appearance: none; border: 0;
+    background: var(--amber);
+    color: var(--espresso);
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 9px;
+    padding: 8px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .install-dismiss {
+    appearance: none; border: 0; background: none;
+    color: var(--faint); font-size: 18px; cursor: pointer;
+    flex-shrink: 0; line-height: 1;
+  }
+
+  /* ── FOOTER ──────────────────────────────────── */
+  .site-footer {
+    padding: 0 28px 20px;
+    font-size: 11px;
+    color: var(--faint);
+    text-align: center;
+    flex-shrink: 0;
+    opacity: .6;
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .form-card, .modal { transition: none; animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <img class="logo"
+    src="https://assets.cdn.filesafe.space/ZZON0MNWQbPycdBu5IBp/media/69d6959b0c733af44d656b97.webp"
+    alt="Baci Coffee House">
+  <div class="header-text">
+    <div class="header-eyebrow">Baci Coffee House</div>
+    <div class="header-title">Daily Operations</div>
+  </div>
+</header>
+
+<div class="date-bar" id="datebar"></div>
+
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="installBanner">
+  <div class="install-txt"><b>Add to Home Screen</b> for the full app experience — works offline too.</div>
+  <button class="install-btn" id="installBtn">Install</button>
+  <button class="install-dismiss" id="installDismiss" aria-label="Dismiss">&times;</button>
+</div>
+
+<!-- MAIN GRID -->
+<main class="grid-section">
+
+  <!-- CASH REGISTER -->
+  <div class="section-label">Cash Register</div>
+  <div class="grid" id="grid-cash">
+
+    <div class="form-card theme-green"
+      data-url="https://logs.bacicoffeehouse.com/cash-opening?email=info@bacicoffeehouse.com"
+      data-label="Cash Register — Opening"
+      data-icon="💵"
+      data-desc="Start-of-day drawer count">
+      <div class="card-ambient">💵</div>
+      <div class="card-top">
+        <div class="card-icon">🌅</div>
+        <div class="card-body">
+          <div class="card-label">Opening</div>
+          <div class="card-desc">Start-of-day drawer count</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+    <div class="form-card theme-amber"
+      data-url="https://logs.bacicoffeehouse.com/cash-closing?email=info@bacicoffeehouse.com"
+      data-label="Cash Register — Closing"
+      data-icon="💰"
+      data-desc="End-of-day reconciliation">
+      <div class="card-ambient">💰</div>
+      <div class="card-top">
+        <div class="card-icon">🌙</div>
+        <div class="card-body">
+          <div class="card-label">Closing</div>
+          <div class="card-desc">End-of-day reconciliation</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+  </div>
+
+  <!-- OPS LOGS -->
+  <div class="section-label section-gap">Operations</div>
+  <div class="grid" id="grid-ops">
+
+    <div class="form-card theme-teal"
+      data-url="https://logs.bacicoffeehouse.com/prep-and-waste-management?email=info@bacicoffeehouse.com"
+      data-label="Prep and Waste Management"
+      data-icon="🥗"
+      data-desc="Prep output and waste tracking">
+      <div class="card-ambient">🥗</div>
+      <div class="card-top">
+        <div class="card-icon">♻️</div>
+        <div class="card-body">
+          <div class="card-label">Prep &amp; Waste</div>
+          <div class="card-desc">Prep output and waste tracking</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+    <div class="form-card theme-blue"
+      data-url="https://logs.bacicoffeehouse.com/stock-log?email=info@bacicoffeehouse.com"
+      data-label="Stock Log"
+      data-icon="📦"
+      data-desc="Inventory count and adjustments">
+      <div class="card-ambient">📦</div>
+      <div class="card-top">
+        <div class="card-icon">🗄️</div>
+        <div class="card-body">
+          <div class="card-label">Stock Log</div>
+          <div class="card-desc">Inventory count and adjustments</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+    <div class="form-card theme-orange"
+      data-url="https://logs.bacicoffeehouse.com/order-log?email=info@bacicoffeehouse.com"
+      data-label="Order Log"
+      data-icon="🧾"
+      data-desc="Incoming order documentation">
+      <div class="card-ambient">🧾</div>
+      <div class="card-top">
+        <div class="card-icon">📋</div>
+        <div class="card-body">
+          <div class="card-label">Order Log</div>
+          <div class="card-desc">Incoming order documentation</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+    <div class="form-card theme-indigo"
+      data-url="https://logs.bacicoffeehouse.com/retail-received?email=info@bacicoffeehouse.com"
+      data-label="Retail Received"
+      data-icon="🛍️"
+      data-desc="Log incoming retail shipments">
+      <div class="card-ambient">🛍️</div>
+      <div class="card-top">
+        <div class="card-icon">📥</div>
+        <div class="card-body">
+          <div class="card-label">Retail Received</div>
+          <div class="card-desc">Log incoming retail shipments</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+  </div>
+
+  <!-- MANAGEMENT -->
+  <div class="section-label section-gap">Management</div>
+  <div class="grid" id="grid-mgmt">
+
+    <div class="form-card theme-slate"
+      data-url="https://logs.bacicoffeehouse.com/manager-log?email=info@bacicoffeehouse.com"
+      data-label="Manager's Log"
+      data-icon="📓"
+      data-desc="Daily observations and notes">
+      <div class="card-ambient">📓</div>
+      <div class="card-top">
+        <div class="card-icon">🗒️</div>
+        <div class="card-body">
+          <div class="card-label">Manager's Log</div>
+          <div class="card-desc">Daily observations and notes</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+    <div class="form-card theme-rose"
+      data-url="https://logs.bacicoffeehouse.com/customer-complaint"
+      data-label="Customer Complaint"
+      data-icon="💬"
+      data-desc="Record and resolve complaints">
+      <div class="card-ambient">💬</div>
+      <div class="card-top">
+        <div class="card-icon">😟</div>
+        <div class="card-body">
+          <div class="card-label">Customer Complaint</div>
+          <div class="card-desc">Record and resolve complaints</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+    <div class="form-card theme-purple"
+      data-url="https://logs.bacicoffeehouse.com/employee-write-up?email=info@bacicoffeehouse.com"
+      data-label="Employee Write-Up"
+      data-icon="📝"
+      data-desc="Document disciplinary incidents">
+      <div class="card-ambient">📝</div>
+      <div class="card-top">
+        <div class="card-icon">⚠️</div>
+        <div class="card-body">
+          <div class="card-label">Employee Write-Up</div>
+          <div class="card-desc">Document disciplinary incidents</div>
+        </div>
+      </div>
+      <div class="card-arrow">Open form →</div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">Baci Coffee House &nbsp;·&nbsp; Internal use only</footer>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-go" id="modalGo">Open form</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Date bar ─────────────────────────────────── */
+  (function(){
+    var d=new Date();
+    var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('datebar').textContent=
+      days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+  })();
+
+  /* ── Card click → confirmation modal ─────────── */
+  var pendingUrl='';
+  var overlay=document.getElementById('modalOverlay');
+  var modalIcon=document.getElementById('modalIcon');
+  var modalTitle=document.getElementById('modalTitle');
+  var modalDesc=document.getElementById('modalDesc');
+  var modalGo=document.getElementById('modalGo');
+  var modalCancel=document.getElementById('modalCancel');
+
+  document.querySelectorAll('.form-card').forEach(function(card){
+    card.addEventListener('click', function(){
+      pendingUrl=card.dataset.url;
+      modalIcon.textContent=card.dataset.icon;
+      modalTitle.textContent=card.dataset.label;
+      modalDesc.textContent='You are about to open the '+card.dataset.label+' form. Ready to go?';
+      overlay.classList.add('open');
+      modalGo.focus();
+    });
+  });
+
+  modalCancel.addEventListener('click', function(){ overlay.classList.remove('open'); pendingUrl=''; });
+  overlay.addEventListener('click', function(e){ if(e.target===overlay){ overlay.classList.remove('open'); pendingUrl=''; } });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ overlay.classList.remove('open'); pendingUrl=''; } });
+
+  modalGo.addEventListener('click', function(){
+    overlay.classList.remove('open');
+    if(pendingUrl) window.location.href=pendingUrl;
+    pendingUrl='';
+  });
+
+  /* ── PWA install prompt ───────────────────────── */
+  var deferredPrompt=null;
+  var installBanner=document.getElementById('installBanner');
+  var installBtn=document.getElementById('installBtn');
+  var installDismiss=document.getElementById('installDismiss');
+
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt=e;
+    if(!localStorage.getItem('baci-install-dismissed')){
+      installBanner.classList.add('visible');
+    }
+  });
+  installBtn.addEventListener('click', function(){
+    installBanner.classList.remove('visible');
+    if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt=null; }
+  });
+  installDismiss.addEventListener('click', function(){
+    installBanner.classList.remove('visible');
+    localStorage.setItem('baci-install-dismissed','1');
+  });
+
+  /* ── Service Worker registration ─────────────── */
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+</script>
+</body>
+</html>
