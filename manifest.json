@@ -2,7 +2,7 @@
   "name": "Baci Coffee House — Daily Logs",
   "short_name": "Baci Logs",
   "description": "Daily operations forms for Baci Coffee House staff.",
-  "start_url": "/",
+  "start_url": "https://logs.bacicoffeehouse.com",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#1A0F0A",
