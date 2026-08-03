@@ -1,9 +1,9 @@
 /* Baci Logs — Service Worker v1 */
 var CACHE = 'baci-logs-v1';
 var SHELL = [
-  'https://logs.bacicoffeehouse.com',
-  'https://logs.bacicoffeehouse.com/index.html',
-  'https://logs.bacicoffeehouse.com/manifest.json'
+  'https://app.bacicoffeehouse.com',
+  'https://app.bacicoffeehouse.com/index.html',
+  'https://app.bacicoffeehouse.com/manifest.json'
 ];
 
 self.addEventListener('install', function(e){
@@ -33,7 +33,7 @@ self.addEventListener('fetch', function(e){
         caches.open(CACHE).then(function(c){ c.put(e.request,clone); });
         return res;
       }).catch(function(){
-        return caches.match('https://logs.bacicoffeehouse.com/index.html');
+        return caches.match('https://app.bacicoffeehouse.com/index.html');
       });
     })
   );
