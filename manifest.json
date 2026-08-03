@@ -2,7 +2,7 @@
   "name": "Baci Coffee House — Daily Logs",
   "short_name": "Baci Logs",
   "description": "Daily operations forms for Baci Coffee House staff.",
-  "start_url": "https://logs.bacicoffeehouse.com",
+  "start_url": "https://app.bacicoffeehouse.com",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#1A0F0A",
@@ -24,17 +24,17 @@
   "shortcuts": [
     {
       "name": "Cash Opening",
-      "url": "https://logs.bacicoffeehouse.com/cash-opening?email=info@bacicoffeehouse.com",
+      "url": "https://app.bacicoffeehouse.com/cash-opening?email=info@bacicoffeehouse.com",
       "description": "Start-of-day drawer count"
     },
     {
       "name": "Cash Closing",
-      "url": "https://logs.bacicoffeehouse.com/cash-closing?email=info@bacicoffeehouse.com",
+      "url": "https://app.bacicoffeehouse.com/cash-closing?email=info@bacicoffeehouse.com",
       "description": "End-of-day reconciliation"
     },
     {
       "name": "Manager Log",
-      "url": "https://logs.bacicoffeehouse.com/manager-log?email=info@bacicoffeehouse.com",
+      "url": "https://app.bacicoffeehouse.com/manager-log?email=info@bacicoffeehouse.com",
       "description": "Daily manager notes"
     }
   ]
