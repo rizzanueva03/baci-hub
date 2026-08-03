@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -16,32 +16,63 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --espresso: #1A0F0A;
-    --espresso-mid: #2C1A12;
-    --espresso-light: #3D2518;
-    --cream: #FAF5EE;
-    --cream-soft: #F2EBE0;
-    --green: #0F5E52;
-    --green-soft: #E4EFEB;
-    --amber: #C8882A;
-    --amber-soft: #F6ECD3;
-    --ink: #1A0F0A;
-    --muted: #7A6A5E;
-    --faint: #A89880;
-    --line: rgba(255,255,255,.08);
-    --card: rgba(255,255,255,.07);
-    --card-hover: rgba(255,255,255,.12);
+  /* ── DARK MODE (default) ─────────────────────── */
+  [data-theme="dark"] {
+    --bg:           #1A0F0A;
+    --bg-mid:       #2C1A12;
+    --bg-light:     #3D2518;
+    --text:         #FAF5EE;
+    --text-soft:    #F2EBE0;
+    --text-muted:   #7A6A5E;
+    --text-faint:   #A89880;
+    --amber:        #C8882A;
+    --green:        #0F5E52;
+    --line:         rgba(255,255,255,.08);
+    --card-bg:      rgba(255,255,255,.07);
+    --card-hover:   rgba(255,255,255,.12);
+    --modal-bg:     #2C1A12;
+    --modal-border: rgba(255,255,255,.1);
+    --cancel-border:rgba(255,255,255,.12);
+    --toggle-bg:    rgba(255,255,255,.1);
+    --toggle-text:  #FAF5EE;
+    --section-lbl:  #A89880;
+    --footer-color: #A89880;
+    --install-bg:   #3D2518;
+  }
+
+  /* ── LIGHT MODE ──────────────────────────────── */
+  [data-theme="light"] {
+    --bg:           #FAF5EE;
+    --bg-mid:       #F0E8DC;
+    --bg-light:     #E8DDD0;
+    --text:         #1A0F0A;
+    --text-soft:    #2C1A12;
+    --text-muted:   #6B5A4E;
+    --text-faint:   #8C7B6E;
+    --amber:        #A06A10;
+    --green:        #0F5E52;
+    --line:         rgba(0,0,0,.1);
+    --card-bg:      #FFFFFF;
+    --card-hover:   #F5EDE0;
+    --modal-bg:     #FFFFFF;
+    --modal-border: rgba(0,0,0,.08);
+    --cancel-border:rgba(0,0,0,.15);
+    --toggle-bg:    rgba(0,0,0,.07);
+    --toggle-text:  #1A0F0A;
+    --section-lbl:  #8C7B6E;
+    --footer-color: #8C7B6E;
+    --install-bg:   #EEE4D8;
   }
 
   html, body {
     height: 100%;
-    background: var(--espresso);
-    color: var(--cream);
+    background: var(--bg);
+    color: var(--text);
     font-family: Inter, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    transition: background .25s, color .25s;
   }
 
   body {
@@ -64,9 +95,9 @@
     border-radius: 14px;
     object-fit: cover;
     flex-shrink: 0;
-    box-shadow: 0 2px 12px rgba(0,0,0,.4);
+    box-shadow: 0 2px 12px rgba(0,0,0,.2);
   }
-  .header-text {}
+  .header-text { flex: 1; }
   .header-eyebrow {
     font-size: 10.5px;
     font-weight: 600;
@@ -80,14 +111,36 @@
     font-weight: 700;
     font-size: 22px;
     line-height: 1.1;
-    color: var(--cream);
+    color: var(--text);
   }
+
+  /* ── MODE TOGGLE ─────────────────────────────── */
+  .mode-toggle {
+    appearance: none;
+    border: 0;
+    background: var(--toggle-bg);
+    color: var(--toggle-text);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mode-toggle:hover { opacity: .85; }
+  .mode-toggle .toggle-icon { font-size: 15px; }
 
   /* ── DATE BAR ───────────────────────────────── */
   .date-bar {
     padding: 14px 28px 0;
     font-size: 12px;
-    color: var(--faint);
+    color: var(--text-faint);
     font-weight: 500;
     letter-spacing: .03em;
     flex-shrink: 0;
@@ -103,7 +156,7 @@
     font-weight: 700;
     letter-spacing: .13em;
     text-transform: uppercase;
-    color: var(--faint);
+    color: var(--section-lbl);
     margin-bottom: 10px;
     padding-left: 4px;
   }
@@ -124,7 +177,7 @@
 
   /* ── CARD ───────────────────────────────────── */
   .form-card {
-    background: var(--card);
+    background: var(--card-bg);
     border: 1px solid var(--line);
     border-radius: 18px;
     padding: 20px 18px 18px;
@@ -147,29 +200,8 @@
   @media (hover: hover) {
     .form-card:hover {
       background: var(--card-hover);
-      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+      box-shadow: 0 8px 32px rgba(0,0,0,.12);
     }
-  }
-
-  /* Ambient icon watermark */
-  .card-ambient {
-    position: absolute;
-    right: -6px;
-    bottom: -8px;
-    font-size: 56px;
-    opacity: .08;
-    pointer-events: none;
-    line-height: 1;
-    user-select: none;
-  }
-
-  /* Accent dot */
-  .card-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 1px;
   }
 
   .card-top {
@@ -195,35 +227,48 @@
     font-weight: 600;
     font-size: 15px;
     line-height: 1.2;
-    color: var(--cream);
+    color: var(--text);
     margin-bottom: 3px;
   }
   .card-desc {
     font-size: 11.5px;
-    color: var(--faint);
+    color: var(--text-faint);
     line-height: 1.4;
   }
 
-  /* Card color themes */
-  .theme-green  .card-icon { background: rgba(15,94,82,.35); }
-  .theme-amber  .card-icon { background: rgba(200,136,42,.25); }
-  .theme-blue   .card-icon { background: rgba(37,99,235,.2); }
-  .theme-rose   .card-icon { background: rgba(190,50,60,.2); }
-  .theme-purple .card-icon { background: rgba(109,40,217,.2); }
-  .theme-slate  .card-icon { background: rgba(100,116,139,.2); }
-  .theme-teal   .card-icon { background: rgba(20,184,166,.2); }
-  .theme-orange .card-icon { background: rgba(234,88,12,.2); }
-  .theme-indigo .card-icon { background: rgba(79,70,229,.2); }
+  /* Card color themes — icon backgrounds */
+  [data-theme="dark"] .theme-green  .card-icon { background: rgba(15,94,82,.35); }
+  [data-theme="dark"] .theme-amber  .card-icon { background: rgba(200,136,42,.25); }
+  [data-theme="dark"] .theme-blue   .card-icon { background: rgba(37,99,235,.2); }
+  [data-theme="dark"] .theme-rose   .card-icon { background: rgba(190,50,60,.2); }
+  [data-theme="dark"] .theme-purple .card-icon { background: rgba(109,40,217,.2); }
+  [data-theme="dark"] .theme-slate  .card-icon { background: rgba(100,116,139,.2); }
+  [data-theme="dark"] .theme-teal   .card-icon { background: rgba(20,184,166,.2); }
+  [data-theme="dark"] .theme-orange .card-icon { background: rgba(234,88,12,.2); }
+  [data-theme="dark"] .theme-indigo .card-icon { background: rgba(79,70,229,.2); }
+
+  [data-theme="light"] .theme-green  .card-icon { background: #D4EDE9; }
+  [data-theme="light"] .theme-amber  .card-icon { background: #F6ECD3; }
+  [data-theme="light"] .theme-blue   .card-icon { background: #DBEAFE; }
+  [data-theme="light"] .theme-rose   .card-icon { background: #FFE4E6; }
+  [data-theme="light"] .theme-purple .card-icon { background: #EDE9FE; }
+  [data-theme="light"] .theme-slate  .card-icon { background: #E2E8F0; }
+  [data-theme="light"] .theme-teal   .card-icon { background: #CCFBF1; }
+  [data-theme="light"] .theme-orange .card-icon { background: #FFEDD5; }
+  [data-theme="light"] .theme-indigo .card-icon { background: #E0E7FF; }
 
   .card-arrow {
-    font-size: 13px;
-    color: var(--faint);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-faint);
     align-self: flex-end;
     margin-top: auto;
     transition: color .15s;
+    position: relative;
+    z-index: 1;
   }
   .form-card:hover .card-arrow,
-  .form-card:active .card-arrow { color: var(--cream); }
+  .form-card:active .card-arrow { color: var(--green); }
 
   /* ── SECTION DIVIDER ─────────────────────────── */
   .section-gap { margin-top: 20px; }
@@ -232,7 +277,7 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(10,5,2,.7);
+    background: rgba(10,5,2,.65);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     z-index: 900;
@@ -243,49 +288,42 @@
   }
   .modal-overlay.open { display: flex; }
   .modal {
-    background: #2C1A12;
-    border: 1px solid rgba(255,255,255,.1);
+    background: var(--modal-bg);
+    border: 1px solid var(--modal-border);
     border-radius: 22px;
     padding: 28px 24px 22px;
     max-width: 360px;
     width: 100%;
-    box-shadow: 0 24px 64px rgba(0,0,0,.5);
+    box-shadow: 0 24px 64px rgba(0,0,0,.3);
     animation: modalIn .2s ease;
   }
   @keyframes modalIn {
     from { opacity:0; transform:scale(.94) translateY(8px); }
     to   { opacity:1; transform:scale(1) translateY(0); }
   }
-  .modal-icon {
-    font-size: 36px;
-    text-align: center;
-    margin-bottom: 12px;
-  }
+  .modal-icon { font-size: 36px; text-align: center; margin-bottom: 12px; }
   .modal-title {
     font-family: Fraunces, serif;
     font-weight: 700;
     font-size: 20px;
-    color: var(--cream);
+    color: var(--text);
     text-align: center;
     margin-bottom: 6px;
   }
   .modal-desc {
     font-size: 13.5px;
-    color: var(--faint);
+    color: var(--text-faint);
     text-align: center;
     line-height: 1.55;
     margin-bottom: 22px;
   }
-  .modal-btns {
-    display: flex;
-    gap: 10px;
-  }
+  .modal-btns { display: flex; gap: 10px; }
   .btn-cancel {
     flex: 1;
     padding: 13px;
-    border: 1px solid rgba(255,255,255,.12);
+    border: 1px solid var(--cancel-border);
     background: transparent;
-    color: var(--faint);
+    color: var(--text-faint);
     border-radius: 12px;
     font-family: Inter, sans-serif;
     font-size: 14px;
@@ -294,7 +332,7 @@
     transition: background .15s, color .15s;
     -webkit-tap-highlight-color: transparent;
   }
-  .btn-cancel:hover { background: rgba(255,255,255,.06); color: var(--cream); }
+  .btn-cancel:hover { background: var(--toggle-bg); color: var(--text); }
   .btn-go {
     flex: 2;
     padding: 13px;
@@ -314,8 +352,8 @@
   /* ── INSTALL BANNER ──────────────────────────── */
   .install-banner {
     display: none;
-    margin: 0 20px 12px;
-    background: var(--espresso-light);
+    margin: 14px 20px 0;
+    background: var(--install-bg);
     border: 1px solid rgba(200,136,42,.3);
     border-radius: 14px;
     padding: 12px 16px;
@@ -324,24 +362,18 @@
     flex-shrink: 0;
   }
   .install-banner.visible { display: flex; }
-  .install-txt { flex: 1; font-size: 13px; color: var(--cream-soft); line-height: 1.4; }
+  .install-txt { flex: 1; font-size: 13px; color: var(--text-soft); line-height: 1.4; }
   .install-txt b { color: var(--amber); }
   .install-btn {
     appearance: none; border: 0;
-    background: var(--amber);
-    color: var(--espresso);
-    font-family: Inter, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    border-radius: 9px;
-    padding: 8px 14px;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
+    background: var(--amber); color: #fff;
+    font-family: Inter, sans-serif; font-size: 13px; font-weight: 700;
+    border-radius: 9px; padding: 8px 14px; cursor: pointer;
+    white-space: nowrap; flex-shrink: 0;
   }
   .install-dismiss {
     appearance: none; border: 0; background: none;
-    color: var(--faint); font-size: 18px; cursor: pointer;
+    color: var(--text-faint); font-size: 18px; cursor: pointer;
     flex-shrink: 0; line-height: 1;
   }
 
@@ -349,13 +381,12 @@
   .site-footer {
     padding: 0 28px 20px;
     font-size: 11px;
-    color: var(--faint);
+    color: var(--footer-color);
     text-align: center;
     flex-shrink: 0;
     opacity: .6;
   }
 
-  /* Reduce motion */
   @media (prefers-reduced-motion: reduce) {
     .form-card, .modal { transition: none; animation: none; }
   }
@@ -372,6 +403,10 @@
     <div class="header-eyebrow">Baci Coffee House</div>
     <div class="header-title">Daily Operations</div>
   </div>
+  <button class="mode-toggle" id="modeToggle" aria-label="Toggle light/dark mode">
+    <span class="toggle-icon" id="toggleIcon">☀️</span>
+    <span id="toggleLabel">Light</span>
+  </button>
 </header>
 
 <div class="date-bar" id="datebar"></div>
@@ -388,14 +423,13 @@
 
   <!-- CASH REGISTER -->
   <div class="section-label">Cash Register</div>
-  <div class="grid" id="grid-cash">
+  <div class="grid">
 
     <div class="form-card theme-green"
       data-url="https://logs.bacicoffeehouse.com/cash-opening?email=info@bacicoffeehouse.com"
       data-label="Cash Register — Opening"
       data-icon="💵"
       data-desc="Start-of-day drawer count">
-      <div class="card-ambient">💵</div>
       <div class="card-top">
         <div class="card-icon">🌅</div>
         <div class="card-body">
@@ -411,7 +445,6 @@
       data-label="Cash Register — Closing"
       data-icon="💰"
       data-desc="End-of-day reconciliation">
-      <div class="card-ambient">💰</div>
       <div class="card-top">
         <div class="card-icon">🌙</div>
         <div class="card-body">
@@ -424,16 +457,15 @@
 
   </div>
 
-  <!-- OPS LOGS -->
+  <!-- OPERATIONS -->
   <div class="section-label section-gap">Operations</div>
-  <div class="grid" id="grid-ops">
+  <div class="grid">
 
     <div class="form-card theme-teal"
       data-url="https://logs.bacicoffeehouse.com/prep-and-waste-management?email=info@bacicoffeehouse.com"
       data-label="Prep and Waste Management"
       data-icon="🥗"
       data-desc="Prep output and waste tracking">
-      <div class="card-ambient">🥗</div>
       <div class="card-top">
         <div class="card-icon">♻️</div>
         <div class="card-body">
@@ -449,7 +481,6 @@
       data-label="Stock Log"
       data-icon="📦"
       data-desc="Inventory count and adjustments">
-      <div class="card-ambient">📦</div>
       <div class="card-top">
         <div class="card-icon">🗄️</div>
         <div class="card-body">
@@ -465,7 +496,6 @@
       data-label="Order Log"
       data-icon="🧾"
       data-desc="Incoming order documentation">
-      <div class="card-ambient">🧾</div>
       <div class="card-top">
         <div class="card-icon">📋</div>
         <div class="card-body">
@@ -481,7 +511,6 @@
       data-label="Retail Received"
       data-icon="🛍️"
       data-desc="Log incoming retail shipments">
-      <div class="card-ambient">🛍️</div>
       <div class="card-top">
         <div class="card-icon">📥</div>
         <div class="card-body">
@@ -496,14 +525,13 @@
 
   <!-- MANAGEMENT -->
   <div class="section-label section-gap">Management</div>
-  <div class="grid" id="grid-mgmt">
+  <div class="grid">
 
     <div class="form-card theme-slate"
       data-url="https://logs.bacicoffeehouse.com/manager-log?email=info@bacicoffeehouse.com"
       data-label="Manager's Log"
       data-icon="📓"
       data-desc="Daily observations and notes">
-      <div class="card-ambient">📓</div>
       <div class="card-top">
         <div class="card-icon">🗒️</div>
         <div class="card-body">
@@ -519,7 +547,6 @@
       data-label="Customer Complaint"
       data-icon="💬"
       data-desc="Record and resolve complaints">
-      <div class="card-ambient">💬</div>
       <div class="card-top">
         <div class="card-icon">😟</div>
         <div class="card-body">
@@ -535,7 +562,6 @@
       data-label="Employee Write-Up"
       data-icon="📝"
       data-desc="Document disciplinary incidents">
-      <div class="card-ambient">📝</div>
       <div class="card-top">
         <div class="card-icon">⚠️</div>
         <div class="card-body">
@@ -565,7 +591,7 @@
 </div>
 
 <script>
-  /* ── Date bar ─────────────────────────────────── */
+  /* ── Date bar ────────────────────────────────── */
   (function(){
     var d=new Date();
     var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -573,6 +599,32 @@
     document.getElementById('datebar').textContent=
       days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
   })();
+
+  /* ── Light / Dark mode toggle ────────────────── */
+  var html=document.documentElement;
+  var toggleBtn=document.getElementById('modeToggle');
+  var toggleIcon=document.getElementById('toggleIcon');
+  var toggleLabel=document.getElementById('toggleLabel');
+
+  function setTheme(theme){
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('baci-theme', theme);
+    if(theme==='light'){
+      toggleIcon.textContent='🌙';
+      toggleLabel.textContent='Dark';
+    } else {
+      toggleIcon.textContent='☀️';
+      toggleLabel.textContent='Light';
+    }
+  }
+
+  /* Load saved preference */
+  var saved=localStorage.getItem('baci-theme');
+  setTheme(saved==='light' ? 'light' : 'dark');
+
+  toggleBtn.addEventListener('click', function(){
+    setTheme(html.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+  });
 
   /* ── Card click → confirmation modal ─────────── */
   var pendingUrl='';
@@ -595,9 +647,8 @@
   });
 
   modalCancel.addEventListener('click', function(){ overlay.classList.remove('open'); pendingUrl=''; });
-  overlay.addEventListener('click', function(e){ if(e.target===overlay){ overlay.classList.remove('open'); pendingUrl=''; } });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ overlay.classList.remove('open'); pendingUrl=''; } });
-
+  overlay.addEventListener('click', function(e){ if(e.target===overlay){ overlay.classList.remove('open'); pendingUrl=''; }});
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ overlay.classList.remove('open'); pendingUrl=''; }});
   modalGo.addEventListener('click', function(){
     overlay.classList.remove('open');
     if(pendingUrl) window.location.href=pendingUrl;
@@ -611,11 +662,8 @@
   var installDismiss=document.getElementById('installDismiss');
 
   window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault();
-    deferredPrompt=e;
-    if(!localStorage.getItem('baci-install-dismissed')){
-      installBanner.classList.add('visible');
-    }
+    e.preventDefault(); deferredPrompt=e;
+    if(!localStorage.getItem('baci-install-dismissed')) installBanner.classList.add('visible');
   });
   installBtn.addEventListener('click', function(){
     installBanner.classList.remove('visible');
@@ -626,7 +674,7 @@
     localStorage.setItem('baci-install-dismissed','1');
   });
 
-  /* ── Service Worker registration ─────────────── */
+  /* ── Service Worker ───────────────────────────── */
   if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').catch(function(){});
   }
